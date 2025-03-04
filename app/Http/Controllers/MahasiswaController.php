@@ -49,18 +49,14 @@ class MahasiswaController extends Controller
             'password' => 'required|string|min:6'
         ]);
 
-        if ($request->hasFile('foto')) {
-            $fotoPath = $request->file('foto')->store('mahasiswa_foto', 'public');
-        } else {
-            $fotoPath = null;
-        }
+        $path = $request->file('foto') ? $request->file('foto')->store('mahasiswa_foto', 'public') : null;
         
         $mahasiswa = Mahasiswa::create([
             'nama' => $request->nama,
             'nim' => $request->nim,
             'email' => $request->email,
             'prodi' => $request->prodi,
-            'foto' => $fotoPath,
+            'foto' => $path,
             'alamat' => $request->alamat,
             'no_hp' => $request->no_hp,
             'tanggal_lahir' => $request->tanggal_lahir,

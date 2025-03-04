@@ -32,5 +32,14 @@ class AuthController extends Controller
             'data' => $mahasiswa
         ]);
     }
+
+    public function logout(Request $request)
+    {
+        $request->user()->tokens()->delete();
+
+        return response()->json([
+            'message' => 'Logout berhasil!'
+        ]);
+    }
 }
 

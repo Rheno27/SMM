@@ -11,7 +11,8 @@ class Tugas extends Model
         'deskripsi', 
         'tanggal_pemberian_tugas', 
         'tanggal_pengumpulan', 
-        'status'
+        'status',
+        'mahasiswa_id'
     ];
 
 }

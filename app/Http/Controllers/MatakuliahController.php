@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Matakuliah;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class MatakuliahController extends Controller
 {
@@ -33,9 +34,38 @@ class MatakuliahController extends Controller
             'sks' => 'required|integer|min:1|max:6',
         ]);
 
-        $matakuliah = Matakuliah::create($request->all());
+        $matakuliah = Matakuliah::create([
+            'nama_mata_kuliah' => $request->nama_mata_kuliah,
+            'kode_mata_kuliah' => $request->kode_mata_kuliah,
+            'sks' => $request->sks,
+        ]);
         return response()->json([
             'message' => 'Mata Kuliah berhasil ditambahkan!',
+            'data' => $matakuliah
+        ]);
+    }
+
+    public function update(Request $request, Matakuliah $matakuliah)
+    {
+        $matakuliah->update([
+            'nama_mata_kuliah' => $request->nama_mata_kuliah,   
+            'kode_mata_kuliah' => $request->kode_mata_kuliah,
+            'sks' => $request->sks,
+        ]);
+    
+        return response()->json([
+            'message' => 'Mata Kuliah berhasil diubah!',
+            'data' => $matakuliah
+        ]);
+    }
+    
+
+    public function destroy($id)
+    {
+        $matakuliah = Matakuliah::findOrFail($id);
+        $matakuliah->delete();
+        return response()->json([
+            'message' => 'Mata Kuliah berhasil dihapus!',
             'data' => $matakuliah
         ]);
     }

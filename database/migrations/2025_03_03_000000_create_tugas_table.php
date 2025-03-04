@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('deskripsi');
             $table->date('tanggal_pemberian_tugas');
             $table->date('tanggal_pengumpulan');
-            
             $table->string('status');
             $table->timestamps();
             $table->softDeletes();
