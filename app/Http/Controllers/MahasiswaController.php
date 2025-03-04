@@ -4,62 +4,73 @@ namespace App\Http\Controllers;
 
 use App\Models\Mahasiswa;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
-use Illuminate\Http\RedirectResponse;
-
-use App\Models\Mahasiswa;
 
 class MahasiswaController extends Controller
 {
     /**
-     * show the form for creating a new resource
+     * Menampilkan daftar mahasiswa
      */
-    public function create()
+    public function index()
     {
-        return response()->json(Mahasiswa::all()->get());
+        $mahasiswa = Mahasiswa::all();
+        return response()->json([
+            'message' => 'Mahasiswa berhasil ditampilkan!',
+            'data' => $mahasiswa
+        ]);
     }
 
     /**
-     * store a newly created resource in storage
+     * Menampilkan detail mahasiswa berdasarkan ID
+     */
+    public function show($id)
+    {
+        $mahasiswa = Mahasiswa::findOrFail($id);
+        return response()->json([
+            'message' => 'Mahasiswa berhasil ditampilkan!',
+            'data' => $mahasiswa
+        ]);
+    }
+
+    /**
+     * Menyimpan data mahasiswa baru
      */
     public function store(Request $request)
     {
         $request->validate([
-            'nama' => 'required',
-            'nim' => 'required',
-            'email' => 'required',
-            'prodi' => 'required',
-            'foto' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'alamat' => 'required',
-            'no_hp' => 'required',
-            'tanggal_lahir' => 'required',
-            'jenis_kelamin' => 'required',
+            'nama' => 'required|string|max:100',
+            'nim' => 'required|string|max:10|unique:mahasiswa,nim',
+            'email' => 'required|email|max:100|unique:mahasiswa,email',
+            'prodi' => 'required|string|max:100',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'alamat' => 'required|string|max:255',
+            'no_hp' => 'required|string|max:15',
+            'tanggal_lahir' => 'required|date',
+            'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
+            'password' => 'required|string|min:6'
         ]);
-        $path = $request->file('foto') ? $request->file('foto')->store('posts', 'public') : null;
 
-        $post = Mahasiswa::create([
+        if ($request->hasFile('foto')) {
+            $fotoPath = $request->file('foto')->store('mahasiswa_foto', 'public');
+        } else {
+            $fotoPath = null;
+        }
+        
+        $mahasiswa = Mahasiswa::create([
             'nama' => $request->nama,
             'nim' => $request->nim,
             'email' => $request->email,
             'prodi' => $request->prodi,
-            'foto' => $path,
+            'foto' => $fotoPath,
             'alamat' => $request->alamat,
             'no_hp' => $request->no_hp,
             'tanggal_lahir' => $request->tanggal_lahir,
             'jenis_kelamin' => $request->jenis_kelamin,
+            'password' => bcrypt($request->password)
         ]);
 
-        return response()->json($post);
-    }
-
-    /**
-     * display the specified resource
-     */
-    public function show($id)
-    {
-        $post = Mahasiswa::where('id', $id)->first();
-
-        return response()->json($post);
-
+        return response()->json([
+            'message' => 'Mahasiswa berhasil ditambahkan!',
+            'data' => $mahasiswa
+        ], 201);
     }
 }
