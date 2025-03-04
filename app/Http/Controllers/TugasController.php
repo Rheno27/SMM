@@ -77,6 +77,48 @@ class TugasController extends Controller
             'data' => $tugas
         ]);
     }
+
+    public function update(Request $request, $id)
+    {
+        $tugas = Tugas::findOrFail($id);
+        $user_id = Auth::user()->id;
+        if ($tugas->mahasiswa_id !== $user_id) {
+            return response()->json([
+                'message' => 'Anda tidak memiliki akses untuk mengubah tugas ini!',
+                'data' => []
+            ], 403); 
+        }
     
+        $request->validate([
+            'nama_tugas' => 'sometimes|string|max:100',
+            'deskripsi' => 'sometimes|string',
+            'tanggal_pemberian_tugas' => 'sometimes|date',
+            'tanggal_pengumpulan' => 'sometimes|date',
+            'status' => 'sometimes|string',
+        ]);
     
+        $tugas->update($request->only(['nama_tugas', 'deskripsi', 'tanggal_pemberian_tugas', 'tanggal_pengumpulan', 'status']));
+    
+        return response()->json([
+            'message' => 'Tugas berhasil diubah!',
+            'data' => $tugas
+        ]);
+    }
+
+    public function destroy($id)
+    {
+        $tugas = Tugas::findOrFail($id);
+        $user_id = Auth::user()->id;
+        if ($tugas->mahasiswa_id !== $user_id) {
+            return response()->json([
+                'message' => 'Anda tidak memiliki akses untuk menghapus tugas ini!',
+                'data' => []
+            ], 403); 
+        }
+        $tugas->delete();
+        return response()->json([
+            'message' => 'Tugas berhasil dihapus!',
+            'data' => $tugas
+        ]);
+    }
 }

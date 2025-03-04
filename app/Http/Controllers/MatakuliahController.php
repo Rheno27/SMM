@@ -45,20 +45,22 @@ class MatakuliahController extends Controller
         ]);
     }
 
-    public function update(Request $request, Matakuliah $matakuliah)
+    public function update(Request $request, $id)
     {
-        $matakuliah->update([
-            'nama_mata_kuliah' => $request->nama_mata_kuliah,   
-            'kode_mata_kuliah' => $request->kode_mata_kuliah,
-            'sks' => $request->sks,
+        $matakuliah = Matakuliah::findOrFail($id);
+        $request->validate([
+            'nama_mata_kuliah' => 'sometimes|string|max:100',
+            'kode_mata_kuliah' => 'sometimes|string|max:10|unique:mata_kuliah,kode_mata_kuliah',
+            'sks' => 'sometimes|integer|min:1|max:6',
         ]);
+
+        $matakuliah->update($request->only('nama_mata_kuliah', 'kode_mata_kuliah', 'sks'));
     
         return response()->json([
             'message' => 'Mata Kuliah berhasil diubah!',
             'data' => $matakuliah
         ]);
     }
-    
 
     public function destroy($id)
     {

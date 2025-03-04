@@ -13,6 +13,8 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware(['auth:san
 Route::get('/mahasiswa', [MahasiswaController::class, 'index'])->middleware(['auth:sanctum']);
 Route::get('/mahasiswa/{id}', [MahasiswaController::class, 'show'])->middleware(['auth:sanctum']);
 Route::post('/mahasiswa', [MahasiswaController::class, 'store'])->middleware(['auth:sanctum']);
+Route::put('/mahasiswa/{id}', [MahasiswaController::class, 'update'])->middleware(['auth:sanctum']);
+Route::delete('/mahasiswa/{id}', [MahasiswaController::class, 'destroy'])->middleware(['auth:sanctum']);
 
 Route::get('/matakuliah', [MatakuliahController::class, 'index'])->middleware(['auth:sanctum']);
 Route::get('/matakuliah/{id}', [MatakuliahController::class, 'show'])->middleware(['auth:sanctum']);
@@ -23,3 +25,5 @@ Route::delete('/matakuliah/{id}', [MatakuliahController::class, 'destroy'])->mid
 Route::get('/tugas', [TugasController::class, 'index'])->middleware(['auth:sanctum']);
 Route::get('/tugas/{identifier}', [TugasController::class, 'show'])->middleware(['auth:sanctum']);
 Route::post('/tugas', [TugasController::class, 'store'])->middleware(['auth:sanctum']);
+Route::put('/tugas/{id}', [TugasController::class, 'update'])->middleware(['auth:sanctum']);
+Route::delete('/tugas/{id}', [TugasController::class, 'destroy'])->middleware(['auth:sanctum']);

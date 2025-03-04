@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Mahasiswa;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class MahasiswaController extends Controller
 {
@@ -69,4 +71,63 @@ class MahasiswaController extends Controller
             'data' => $mahasiswa
         ], 201);
     }
+
+    public function update(Request $request, $id)
+    {
+        $mahasiswa = Mahasiswa::findOrFail($id);
+        $user_id = Auth::user()->id;
+
+        if ($mahasiswa->id !== $user_id) {
+            return response()->json([
+                'message' => 'Anda tidak memiliki akses untuk mengubah data ini!',
+                'data' => []
+            ], 403);
+        }
+
+        $request->validate([
+            'nama' => 'sometimes|string|max:100',
+            'nim' => 'sometimes|string|max:10|unique:mahasiswa,nim,' ,
+            'email' => 'sometimes|email|max:100|unique:mahasiswa,email,',
+            'prodi' => 'sometimes|string|max:100',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'alamat' => 'sometimes|string|max:255',
+            'no_hp' => 'sometimes|string|max:15',
+            'tanggal_lahir' => 'sometimes|date',
+            'jenis_kelamin' => 'sometimes|in:Laki-laki,Perempuan',
+        ]);
+
+        if ($request->hasFile('foto')) {
+            if ($mahasiswa->foto) {
+                Storage::disk('public')->delete($mahasiswa->foto);
+            }
+
+            $path = $request->file('foto')->store('mahasiswa_foto', 'public');
+            $mahasiswa->foto = $path;
+        }
+
+        $mahasiswa->update($request->except('foto'));
+
+        if(empty($request->input('nama')) && empty($request->input('nim')) && empty($request->input('email')) && empty($request->input('prodi')) && empty($request->input('alamat')) && empty($request->input('no_hp')) && empty($request->input('tanggal_lahir')) && empty($request->input('jenis_kelamin'))){
+            return response()->json([
+                'message' => 'Tidak ada data yang diubah!',
+                'data' => []
+            ], 400);
+        }
+
+        return response()->json([
+            'message' => 'Mahasiswa berhasil diubah!',
+            'data' => $mahasiswa
+        ]);
+    }
+
+    public function destroy($id)
+    {
+        $mahasiswa = Mahasiswa::findOrFail($id);
+        $mahasiswa->delete();
+        return response()->json([
+            'message' => 'Mahasiswa berhasil dihapus!',
+            'data' => $mahasiswa
+        ]);
+    }
+    
 }
