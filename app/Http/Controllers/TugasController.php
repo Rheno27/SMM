@@ -12,7 +12,6 @@ class TugasController extends Controller
     public function index()
     {
         $tugas = Tugas::all();
-
         return response()->json([
             'message' => 'Tugas berhasil ditampilkan!',
             'data' => $tugas
@@ -29,7 +28,6 @@ class TugasController extends Controller
         }
     
         $tugas = Tugas::find($identifier);
-    
         if ($tugas) {
             return response()->json([
                 'message' => 'Tugas berhasil ditampilkan!',
@@ -38,7 +36,6 @@ class TugasController extends Controller
         }
     
         $tugasByMahasiswa = Tugas::where('mahasiswa_id', $identifier)->get();
-    
         if ($tugasByMahasiswa->isEmpty()) {
             return response()->json([
                 'message' => 'Tugas tidak ditemukan!',
@@ -61,8 +58,8 @@ class TugasController extends Controller
             'tanggal_pengumpulan' => 'required|date',
             'status' => 'required|string',
         ]);
+
         $mahasiswa_id = Auth::user()->id;
-        
         $tugas = Tugas::create([
             'nama_tugas' => $request->nama_tugas,   
             'deskripsi' => $request->deskripsi,
@@ -98,7 +95,6 @@ class TugasController extends Controller
         ]);
     
         $tugas->update($request->only(['nama_tugas', 'deskripsi', 'tanggal_pemberian_tugas', 'tanggal_pengumpulan', 'status']));
-    
         return response()->json([
             'message' => 'Tugas berhasil diubah!',
             'data' => $tugas

@@ -18,4 +18,10 @@ class Matakuliah extends Model
         'sks',
     ];
     
+    public function mahasiswa()
+    {
+        return $this->belongsToMany(Mahasiswa::class, 'mahasiswa_mata_kuliah', 'mata_kuliah_id', 'mahasiswa_id')
+                    ->withTimestamps();
+    }
+    
 }

@@ -35,4 +35,17 @@ class Mahasiswa extends Authenticatable
         'tanggal_lahir' => 'date',
         'password' => 'hashed',
     ];
+
+    public function matakuliah()
+    {
+        return $this->belongsToMany(Matakuliah::class, 'mahasiswa_mata_kuliah', 'mahasiswa_id', 'mata_kuliah_id')
+                    ->withTimestamps();
+    }
+    
+
+    public function tugas()
+    {
+        return $this->hasMany(Tugas::class, 'mahasiswa_id');
+    }
+
 }

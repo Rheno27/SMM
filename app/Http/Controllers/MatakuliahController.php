@@ -65,10 +65,13 @@ class MatakuliahController extends Controller
     public function destroy($id)
     {
         $matakuliah = Matakuliah::findOrFail($id);
+        $matakuliah->mahasiswa()->detach();
+    
         $matakuliah->delete();
         return response()->json([
             'message' => 'Mata Kuliah berhasil dihapus!',
             'data' => $matakuliah
         ]);
     }
+    
 }

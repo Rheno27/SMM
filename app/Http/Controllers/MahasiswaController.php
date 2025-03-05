@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Mahasiswa;
+use App\Models\Matakuliah;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+
 
 class MahasiswaController extends Controller
 {
@@ -26,7 +28,13 @@ class MahasiswaController extends Controller
      */
     public function show($id)
     {
-        $mahasiswa = Mahasiswa::findOrFail($id);
+        $mahasiswa = Mahasiswa::find($id);
+        if (!$mahasiswa) {
+            return response()->json([
+                'message' => 'User tidak ditemukan!',
+                'data' => []
+            ], 404);
+        }
         return response()->json([
             'message' => 'Mahasiswa berhasil ditampilkan!',
             'data' => $mahasiswa
@@ -72,11 +80,19 @@ class MahasiswaController extends Controller
         ], 201);
     }
 
+    /**
+     * Mengubah data mahasiswa berdasarkan ID
+     */
     public function update(Request $request, $id)
     {
-        $mahasiswa = Mahasiswa::findOrFail($id);
+        $mahasiswa = Mahasiswa::find($id);
         $user_id = Auth::user()->id;
-
+        if (!$mahasiswa) {
+            return response()->json([
+                'message' => 'User tidak ditemukan!',
+                'data' => []
+            ], 404);
+        }
         if ($mahasiswa->id !== $user_id) {
             return response()->json([
                 'message' => 'Anda tidak memiliki akses untuk mengubah data ini!',
@@ -120,14 +136,87 @@ class MahasiswaController extends Controller
         ]);
     }
 
+    /**
+     * Menghapus data mahasiswa berdasarkan ID
+     */
     public function destroy($id)
     {
-        $mahasiswa = Mahasiswa::findOrFail($id);
+        $mahasiswa = Mahasiswa::find($id);
+        $user_id = Auth::user()->id;
+        if (!$mahasiswa) {
+            return response()->json([
+                'message' => 'User tidak ditemukan!',
+                'data' => []
+            ], 404);
+        }
+    
+        if ($mahasiswa->id !== $user_id) {
+            return response()->json([
+                'message' => 'Anda tidak memiliki akses untuk menghapus data ini!',
+                'data' => []
+            ], 403);
+        }
+        $mahasiswa->matakuliah()->detach();
+    
+        $mahasiswa->tugas()->delete();
+    
         $mahasiswa->delete();
+    
+        if ($mahasiswa->tokens()) {
+            $mahasiswa->tokens()->delete();
+        }
         return response()->json([
-            'message' => 'Mahasiswa berhasil dihapus!',
-            'data' => $mahasiswa
+            'message' => 'Akun berhasil dihapus dan Anda telah logout!',
+            'data' => []
         ]);
     }
+
+    /**
+     * Menambahkan mata kuliah ke mahasiswa
+     */ 
+    public function tambahMatakuliah(Request $request, $mahasiswa_id)
+    {
+        $mahasiswa = Mahasiswa::find($mahasiswa_id);
+        $user_id = Auth::user()->id;
+        
+        if (!$mahasiswa) {
+            return response()->json([
+                'message' => 'Mahasiswa tidak ditemukan!',
+                'data' => []
+            ], 404);
+        }
     
+        if ($mahasiswa->id !== $user_id) {
+            return response()->json([
+                'message' => 'Anda tidak memiliki akses untuk menambahkan mata kuliah ini!',
+                'data' => []
+            ], 403);
+        }
+    
+        $matakuliah_id = $request->input('mata_kuliah_id');
+        $matakuliah = Matakuliah::find($matakuliah_id);
+    
+        if (!$matakuliah) {
+            return response()->json([
+                'message' => 'Mata kuliah tidak ditemukan!',
+                'data' => []
+            ], 404);
+        }
+    
+        if ($mahasiswa->matakuliah()->where('mata_kuliah_id', $matakuliah_id)->exists()) {
+            return response()->json([
+                'message' => 'Mata kuliah sudah diambil oleh mahasiswa ini!',
+                'data' => []
+            ], 400);
+        }
+    
+        $mahasiswa->matakuliah()->attach($matakuliah_id);
+    
+        return response()->json([
+            'message' => 'Mata kuliah berhasil ditambahkan ke mahasiswa!',
+            'data' => $mahasiswa->matakuliah
+        ]);
+    }
+
+
 }

@@ -17,15 +17,13 @@ class AuthController extends Controller
         ]);
 
         $mahasiswa = Mahasiswa::where('email', $request->email)->first();
-
         if (!$mahasiswa || !Hash::check($request->password, $mahasiswa->password)) {
             throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.'],
+                'email' => ['Email atau password salah!'],
             ]);
         }
 
         $token = $mahasiswa->createToken('API TOKEN')->plainTextToken;
-
         return response()->json([
             'message' => 'Login berhasil!',
             'token' => $token,
@@ -36,7 +34,6 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         $request->user()->tokens()->delete();
-
         return response()->json([
             'message' => 'Logout berhasil!'
         ]);
