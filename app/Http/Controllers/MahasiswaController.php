@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Mahasiswa;
 use App\Models\Matakuliah;
 use Illuminate\Http\Request;
+use App\Helpers\ResponseHelper;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
@@ -17,10 +18,7 @@ class MahasiswaController extends Controller
     public function index()
     {
         $mahasiswa = Mahasiswa::all();
-        return response()->json([
-            'message' => 'Mahasiswa berhasil ditampilkan!',
-            'data' => $mahasiswa
-        ]);
+        return ResponseHelper::success('Mahasiswa berhasil ditampilkan!', $mahasiswa);
     }
 
     /**
@@ -30,15 +28,9 @@ class MahasiswaController extends Controller
     {
         $mahasiswa = Mahasiswa::find($id);
         if (!$mahasiswa) {
-            return response()->json([
-                'message' => 'User tidak ditemukan!',
-                'data' => []
-            ], 404);
+            return ResponseHelper::error('Mahasiswa tidak ditemukan!', 404);
         }
-        return response()->json([
-            'message' => 'Mahasiswa berhasil ditampilkan!',
-            'data' => $mahasiswa
-        ]);
+        return ResponseHelper::success('Mahasiswa berhasil ditampilkan!', $mahasiswa);
     }
 
     /**
@@ -74,10 +66,7 @@ class MahasiswaController extends Controller
             'password' => bcrypt($request->password)
         ]);
 
-        return response()->json([
-            'message' => 'Mahasiswa berhasil ditambahkan!',
-            'data' => $mahasiswa
-        ], 201);
+        return ResponseHelper::success('Mahasiswa berhasil ditambahkan!', $mahasiswa);
     }
 
     /**
@@ -88,16 +77,10 @@ class MahasiswaController extends Controller
         $mahasiswa = Mahasiswa::find($id);
         $user_id = Auth::user()->id;
         if (!$mahasiswa) {
-            return response()->json([
-                'message' => 'User tidak ditemukan!',
-                'data' => []
-            ], 404);
+            return ResponseHelper::error('Mahasiswa tidak ditemukan!', 404);
         }
         if ($mahasiswa->id !== $user_id) {
-            return response()->json([
-                'message' => 'Anda tidak memiliki akses untuk mengubah data ini!',
-                'data' => []
-            ], 403);
+            return ResponseHelper::error('Anda tidak memiliki akses untuk mengubah data ini!', 403);
         }
 
         $request->validate([
@@ -124,16 +107,10 @@ class MahasiswaController extends Controller
         $mahasiswa->update($request->except('foto'));
 
         if(empty($request->input('nama')) && empty($request->input('nim')) && empty($request->input('email')) && empty($request->input('prodi')) && empty($request->input('alamat')) && empty($request->input('no_hp')) && empty($request->input('tanggal_lahir')) && empty($request->input('jenis_kelamin'))){
-            return response()->json([
-                'message' => 'Tidak ada data yang diubah!',
-                'data' => []
-            ], 400);
+            return ResponseHelper::error('Tidak ada data yang diubah!', 400);
         }
 
-        return response()->json([
-            'message' => 'Mahasiswa berhasil diubah!',
-            'data' => $mahasiswa
-        ]);
+        return ResponseHelper::success('Mahasiswa berhasil diubah!', $mahasiswa);
     }
 
     /**
@@ -144,17 +121,11 @@ class MahasiswaController extends Controller
         $mahasiswa = Mahasiswa::find($id);
         $user_id = Auth::user()->id;
         if (!$mahasiswa) {
-            return response()->json([
-                'message' => 'User tidak ditemukan!',
-                'data' => []
-            ], 404);
+            return ResponseHelper::error('Mahasiswa tidak ditemukan!', 404);
         }
     
         if ($mahasiswa->id !== $user_id) {
-            return response()->json([
-                'message' => 'Anda tidak memiliki akses untuk menghapus data ini!',
-                'data' => []
-            ], 403);
+            return ResponseHelper::error('Anda tidak memiliki akses untuk menghapus data ini!', 403);
         }
         $mahasiswa->matakuliah()->detach();
     
@@ -165,10 +136,7 @@ class MahasiswaController extends Controller
         if ($mahasiswa->tokens()) {
             $mahasiswa->tokens()->delete();
         }
-        return response()->json([
-            'message' => 'Akun berhasil dihapus dan Anda telah logout!',
-            'data' => []
-        ]);
+        return ResponseHelper::success('Akun berhasil dihapus dan Anda telah logout!', []);
     }
 
     /**
@@ -180,42 +148,27 @@ class MahasiswaController extends Controller
         $user_id = Auth::user()->id;
         
         if (!$mahasiswa) {
-            return response()->json([
-                'message' => 'Mahasiswa tidak ditemukan!',
-                'data' => []
-            ], 404);
+            return ResponseHelper::error('Mahasiswa tidak ditemukan!', 404);
         }
     
         if ($mahasiswa->id !== $user_id) {
-            return response()->json([
-                'message' => 'Anda tidak memiliki akses untuk menambahkan mata kuliah ini!',
-                'data' => []
-            ], 403);
+            return ResponseHelper::error('Anda tidak memiliki akses untuk menambahkan mata kuliah ini!', 403);
         }
     
         $matakuliah_id = $request->input('mata_kuliah_id');
         $matakuliah = Matakuliah::find($matakuliah_id);
     
         if (!$matakuliah) {
-            return response()->json([
-                'message' => 'Mata kuliah tidak ditemukan!',
-                'data' => []
-            ], 404);
+            return ResponseHelper::error('Mata kuliah tidak ditemukan!', 404);
         }
     
         if ($mahasiswa->matakuliah()->where('mata_kuliah_id', $matakuliah_id)->exists()) {
-            return response()->json([
-                'message' => 'Mata kuliah sudah diambil oleh mahasiswa ini!',
-                'data' => []
-            ], 400);
+            return ResponseHelper::error('Mata kuliah sudah diambil oleh mahasiswa ini!', 400);
         }
     
         $mahasiswa->matakuliah()->attach($matakuliah_id);
     
-        return response()->json([
-            'message' => 'Mata kuliah berhasil ditambahkan ke mahasiswa!',
-            'data' => $mahasiswa->matakuliah
-        ]);
+        return ResponseHelper::success('Mata kuliah berhasil ditambahkan ke mahasiswa!', $mahasiswa->matakuliah);
     }
 
 

@@ -6,6 +6,7 @@ use App\Models\Mahasiswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use App\Helpers\ResponseHelper;
 
 class AuthController extends Controller
 {
@@ -24,8 +25,7 @@ class AuthController extends Controller
         }
 
         $token = $mahasiswa->createToken('API TOKEN')->plainTextToken;
-        return response()->json([
-            'message' => 'Login berhasil!',
+        return ResponseHelper::success('Login berhasil!', [
             'token' => $token,
             'data' => $mahasiswa
         ]);
@@ -34,9 +34,7 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         $request->user()->tokens()->delete();
-        return response()->json([
-            'message' => 'Logout berhasil!'
-        ]);
+        return ResponseHelper::success('Logout berhasil!', []);
     }
 }
 

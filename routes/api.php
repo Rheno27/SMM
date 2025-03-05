@@ -25,3 +25,5 @@ Route::get('/matakuliah', [MatakuliahController::class, 'index']);
 Route::get('/matakuliah/{id}', [MatakuliahController::class, 'show']);
 Route::get('/tugas', [TugasController::class, 'index']);
 Route::get('/tugas/{identifier}', [TugasController::class, 'show']);
+
+
