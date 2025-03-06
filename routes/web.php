@@ -8,3 +8,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/mahasiswa', function () {
+    return view('mahasiswa.index');
+});
+
+Route::get('/sidebars', function () {
+    return view('sidebars.index');
+});
+
