@@ -25,10 +25,12 @@ class AuthController extends Controller
         }
 
         $token = $mahasiswa->createToken('API TOKEN')->plainTextToken;
-        return ResponseHelper::success('Login berhasil!', [
+        return response()->json([
+            'message' => 'Login berhasil!',
             'token' => $token,
-            'data' => $mahasiswa
-        ]);
+            'user' => $mahasiswa
+        ], 200);
+        
     }
 
     public function logout(Request $request)
