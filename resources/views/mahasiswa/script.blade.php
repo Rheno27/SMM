@@ -64,4 +64,8 @@
             });
         });
     });
+    $('body').on('click', '#btn-hapus', function(e) {
+        e.preventDefault();
+        $('#modal-delete').modal('show');
+    });
 </script>
