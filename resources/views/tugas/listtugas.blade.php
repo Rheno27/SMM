@@ -93,6 +93,10 @@
                     <div class="modal-body">
                         <p>Apakah anda yakin ingin menghapus data ini?</p>
                     </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary tombol-batal">Batal</button>
+                        <button type="button" class="btn btn-danger tombol-hapus">Hapus</button>
+                    </div>
                 </div>  
             </div>
         </div>
