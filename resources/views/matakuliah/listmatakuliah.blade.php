@@ -24,45 +24,46 @@
             </div>
             <!-- AKHIR DATA -->
         <!-- START MODAL -->
-        <div class="modal" tabindex="-1" id="modal-tambah">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Modal title</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <!-- START FORM -->
-                        <form id='form-tambah'>
-                            <div class="mb-3 row">
-                                <label for="nama_mata_kuliah" class="col-sm-2 col-form-label">Nama Mata Kuliah</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" name='nama' id="nama">
+            <div class="modal" tabindex="-1" id="modal-tambah">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Tambah Mata Kuliah</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- START FORM -->
+                            <form id="form-tambah">
+                                <div class="mb-3 row">
+                                    <label for="nama_mata_kuliah" class="col-sm-4 col-form-label">Nama Mata Kuliah</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" name="nama_mata_kuliah" id="nama_mata_kuliah">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="mb-3 row">
-                                <label for="kode_mata_kuliah" class="col-sm-2 col-form-label">Kode Mata Kuliah</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" name='kode_mata_kuliah' id="kode_mata_kuliah">
+                                <div class="mb-3 row">
+                                    <label for="kode_mata_kuliah" class="col-sm-4 col-form-label">Kode Mata Kuliah</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" name="kode_mata_kuliah" id="kode_mata_kuliah">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="mb-3 row">
-                                <label for="sks" class="col-sm-2 col-form-label">SKS</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" name='sks' id="sks">
+                                <div class="mb-3 row">
+                                    <label for="sks" class="col-sm-4 col-form-label">SKS</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" name="sks" id="sks">
+                                    </div>
+                                </div>                            
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary tombol-simpan">Save changes</button>
                                 </div>
-                            </div>                           
-                        </form>
-                    <!-- AKHIR FORM -->
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button  type="submit" class="btn btn-primary tombol-simpan">Save changes</button>
-                </div>
+                            </form>
+                            <!-- AKHIR FORM -->
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <!-- AKHIR MODAL -->
+            <!-- AKHIR MODAL -->
+
         <!--DELETE MATKUL MODAL -->
         <div class="modal" tabindex="-1" id="modal-delete">
             <div class="modal-dialog">

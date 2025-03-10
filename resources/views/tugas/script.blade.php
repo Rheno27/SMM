@@ -51,25 +51,56 @@
     });
 
     // Tambah Data Tugas
-    $('body').on('click', '.tombol-tambah', function(e) {
-        e.preventDefault();
-        $('#modal-tambah').modal('show');
+    $(document).ready(function() {
+        let user = JSON.parse(localStorage.getItem('user')); // Ambil data user dari local storage
+        let token = localStorage.getItem('token'); // Ambil token untuk autentikasi
 
-        $('.tombol-simpan').on('click', function(e) {
+        if (!user || !token) {
+            alert("Anda harus login terlebih dahulu!");
+            window.location.href = "/login"; // Redirect ke halaman login jika belum login
+            return;
+        }
+
+        $('body').on('click', '.tombol-tambah', function(e) {
             e.preventDefault();
+            $('#modal-tambah').modal('show');
+        });
+
+        $('#form-tambah').on('submit', function(e) {
+            e.preventDefault();
+
+            let formData = {
+                nama_tugas: $('#nama_tugas').val(),
+                deskripsi: $('#deskripsi').val(),
+                tanggal_pemberian_tugas: $('#tanggal_pemberian_tugas').val(),
+                tanggal_pengumpulan: $('#tanggal_pengumpulan').val(),
+                status: $('#status').val(),
+                mahasiswa_id: user.id // Ambil mahasiswa_id dari user yang login
+            };
+
             $.ajax({
-                url: "{{ url('api/tugas') }}",
-                type: 'POST',
-                data: $(this).serialize(),
+                url: "{{ url('api/tugas') }}", // Sesuaikan dengan API endpoint
+                type: "POST",
+                data: JSON.stringify(formData),
+                contentType: "application/json",
+                headers: {
+                    "Authorization": "Bearer " + token, // Pakai token dari local storage
+                },
                 success: function(response) {
                     console.log(response);
+                    alert("Tugas berhasil ditambahkan!");
+                    $('#tugas-table').DataTable().ajax.reload();
+                    $('#modal-tambah').modal('hide');
+                    $('#form-tambah')[0].reset();
                 },
                 error: function(xhr, status, error) {
+                    alert(xhr.responseText, );
                     console.log(xhr.responseText);
                 }
             });
         });
     });
+
 
     // Hapus Data Tugas
     $('body').on('click', '#btn-hapus', function(e) {
@@ -101,3 +132,4 @@
         });
     });
 </script>
+

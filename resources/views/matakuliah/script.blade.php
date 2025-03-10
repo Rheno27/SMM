@@ -34,26 +34,57 @@
         });
     });
 
-    // Tambah Data Matakuliah
-    $('body').on('click', '.tombol-tambah', function(e) {
-        e.preventDefault();
-        $('#modal-tambah').modal('show');
+    $(document).ready(function() {
+        let user = JSON.parse(localStorage.getItem('user'));
+        let token = localStorage.getItem('token');
+        
+        if (!user || !token) {
+            alert("Anda harus login terlebih dahulu!");
+            window.location.href = "/login";
+            return;
+        }
 
-        $('.tombol-simpan').on('click', function(e) {
+        $('body').on('click', '.tombol-tambah', function(e) {
             e.preventDefault();
+            $('#modal-tambah').modal('show');
+        });
+
+        $('#form-tambah').on('submit', function(e) {
+            e.preventDefault();
+
+            let formData = {
+                nama_mata_kuliah: $('#nama_mata_kuliah').val(),
+                kode_mata_kuliah: $('#kode_mata_kuliah').val(),
+                sks: $('#sks').val(),
+            };
+
             $.ajax({
                 url: "{{ url('api/matakuliah') }}",
-                type: 'POST',
-                data: $(this).serialize(),
+                type: "POST",
+                data: JSON.stringify(formData),
+                contentType: "application/json",
+                headers: {
+                    "Authorization": "Bearer " + token,
+                },
                 success: function(response) {
                     console.log(response);
+                    alert("Matakuliah berhasil ditambahkan!");
+                    
+                    if ($.fn.DataTable.isDataTable('#matakuliah-table')) {
+                        $('#matakuliah-table').DataTable().ajax.reload();
+                    }
+
+                    $('#modal-tambah').modal('hide');
+                    $('#form-tambah')[0].reset();
                 },
                 error: function(xhr, status, error) {
                     console.log(xhr.responseText);
+                    alert("Gagal menambahkan matakuliah!");
                 }
             });
         });
     });
+
 
     // Hapus Data Matakuliah
     $('body').on('click', '#btn-hapus', function(e) {

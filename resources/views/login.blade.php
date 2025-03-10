@@ -96,6 +96,7 @@
 
                             if (token) {
                                 localStorage.setItem("token", token);
+                                localStorage.setItem("user", JSON.stringify(response.user));
                                 window.location.href = "/mahasiswa";
                             } else {
                                 console.error("Token tidak ditemukan di response!");

@@ -63,13 +63,10 @@
                             <div class="mb-3 row">
                                 <label for="status" class="col-sm-2 col-form-label">Status</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" name='status' id="status">
-                                </div>
-                            </div>
-                            <div class="mb-3 row">
-                                <label for="mahasiswa_id" class="col-sm-2 col-form-label">Mahasiswa ID</label>
-                                <div class="col-sm-10">
-                                    <input type="date" class="form-control" name='mahasiswa_id' id="mahasiswa_id">
+                                    <select class="form-control" name='status' id="status">
+                                        <option value="Belum Selesai">Belum Selesai</option>
+                                        <option value="Selesai">Selesai</option>
+                                    </select>
                                 </div>
                             </div>
                     <!-- AKHIR FORM -->
