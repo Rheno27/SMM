@@ -41,7 +41,7 @@
                     data: 'id',
                     render: function(data) {
                         return `
-                            <button id="btn-edit" class="btn btn-warning btn-sm" >Edit</button>
+                            <button id="btn-edit" class="btn btn-warning btn-sm" data-id="${data}">Edit</button>
                             <button id="btn-hapus" class="btn btn-danger btn-sm" data-id="${data}">Hapus</button>
                         `;
                     }
@@ -131,5 +131,56 @@
             });
         });
     });
+
+    // Edit Data Tugas
+    $(document).ready(function () {
+        let token = localStorage.getItem('token');
+
+        if (!token) {
+            alert("User tidak ditemukan atau belum login.");
+            return;
+        }
+
+        // Event ketika tombol edit ditekan
+        $('body').on('click', '#btn-edit', function (e) {
+            e.preventDefault();
+
+            let tugasId = $(this).data('id'); // Ambil ID tugas dari tombol edit
+            console.log("ID Tugas: ", tugasId);
+            $('#modal-edit').modal('show'); // Tampilkan modal
+
+            // Ambil data tugas berdasarkan ID
+            $.ajax({
+                url: "/api/tugas/" + tugasId,
+                type: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                },
+                success: function (response) {
+                    console.log("Response API: ", response);
+
+                    let tugas = response.data;
+                    if (tugas) {
+                        // Isi form dengan data lama
+                        $('#edit_nama_tugas').val(tugas.nama_tugas || '');
+                        $('#edit_deskripsi').val(tugas.deskripsi || '');
+                        $('#edit_tanggal_pemberian_tugas').val(tugas.tanggal_pemberian_tugas || '');
+                        $('#edit_tanggal_pengumpulan').val(tugas.tanggal_pengumpulan || '');
+                        $('#edit_status').val(tugas.status || '');
+
+                        // Simpan ID tugas di atribut data-id form
+                        $('#form-edit').attr('data-id', tugasId);
+                    } else {
+                        alert("Data tugas tidak ditemukan!");
+                    }
+                },
+                error: function (xhr) {
+                    alert("Gagal mengambil data tugas.");
+                    console.log("Error: ", xhr.responseText);
+                }
+            });
+        });
+    });
+
 </script>
 

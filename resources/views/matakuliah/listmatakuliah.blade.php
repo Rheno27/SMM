@@ -20,7 +20,6 @@
                             </tr>
                         </thead>
                     </table>
-                
             </div>
             <!-- AKHIR DATA -->
         <!-- START MODAL -->
@@ -55,6 +54,47 @@
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                     <button type="submit" class="btn btn-primary tombol-simpan">Save changes</button>
+                                </div>
+                            </form>
+                            <!-- AKHIR FORM -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- AKHIR MODAL -->
+            
+        <!-- START MODAL -->
+            <div class="modal" tabindex="-1" id="modal-edit">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Edit Mata Kuliah</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- START FORM -->
+                            <form id="form-edit">
+                                <div class="mb-3 row">
+                                    <label for="edit_nama_mata_kuliah" class="col-sm-4 col-form-label">Nama Mata Kuliah</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" name="edit_nama_mata_kuliah" id="edit_nama_mata_kuliah">
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label for="edit_kode_mata_kuliah" class="col-sm-4 col-form-label">Kode Mata Kuliah</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" name="edit_kode_mata_kuliah" id="edit_kode_mata_kuliah">
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label for="edit_sks" class="col-sm-4 col-form-label">SKS</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" name="edit_sks" id="edit_sks">
+                                    </div>
+                                </div>                            
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary tombol-batal">Batal</button>
+                                    <button type="submit" class="btn btn-primary tombol-simpan">Simpan</button>
                                 </div>
                             </form>
                             <!-- AKHIR FORM -->

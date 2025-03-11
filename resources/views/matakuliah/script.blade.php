@@ -25,7 +25,7 @@
                     data: 'id',
                     render: function(data) {
                         return `
-                            <button id="btn-edit" class="btn btn-warning btn-sm">Edit</button>
+                            <button id="btn-edit" class="btn btn-warning btn-sm" data-id="${data}">Edit</button>
                             <button id="btn-hapus" class="btn btn-danger btn-sm" data-id="${data}">Hapus</button>
                         `;
                     }
@@ -116,6 +116,50 @@
                     console.log(xhr.responseText);
                 }
             });
+        });
+    });
+
+    // Edit Data Matakuliah
+    $(document).ready(function() {
+        let token = localStorage.getItem('token');
+        
+        if (!token) {
+            alert("User tidak ditemukan atau belum login.");    
+            return;
+        }
+
+        $('body').on('click', '#btn-edit', function(e) {
+            e.preventDefault();
+
+            let matakuliahId = $(this).data('id');
+            console.log("ID Matakuliah: ", matakuliahId);
+            $('#modal-edit').modal('show');
+
+            $.ajax({
+                url: "/api/matakuliah/" + matakuliahId,
+                type: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                },
+                success: function(response) {
+                    console.log("Response API: ", response);
+
+                    let matakuliah = response.data;
+                    if (matakuliah) {
+                        $('#edit_nama_mata_kuliah').val(matakuliah.nama_mata_kuliah || '');
+                        $('#edit_kode_mata_kuliah').val(matakuliah.kode_mata_kuliah || '');
+                        $('#edit_sks').val(matakuliah.sks || '');
+
+                        $('#form-edit').attr('data-id', matakuliahId);
+                    } else {
+                        alert("Data matakuliah tidak ditemukan!");
+                    }
+                },
+                error: function(xhr) {
+                    alert("Gagal mengambil data matakuliah.");
+                    console.log("Error: ", xhr.responseText);
+                }
+            })
         });
     });
 
