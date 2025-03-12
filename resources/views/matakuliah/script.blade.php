@@ -163,4 +163,47 @@
         });
     });
 
+    $(document).on('submit', '#form-edit', function(e) {
+        e.preventDefault();
+
+        let token = localStorage.getItem('token');
+        if (!token) {
+            alert("User tidak ditemukan atau belum login.");
+            return;
+        }
+
+        let matakuliahId = $(this).attr('data-id');
+        console.log("ID Matakuliah yang akan diubah: ", matakuliahId);
+
+        let updateData = {
+            nama_mata_kuliah: $('#edit_nama_mata_kuliah').val().trim(),
+            kode_mata_kuliah: $('#edit_kode_mata_kuliah').val().trim(),
+            sks: $('#edit_sks').val().trim()
+        };
+
+        console.log("Data yang akan dikirim ke API (PUT):", updateData);
+
+        $.ajax({
+            url: "/api/matakuliah/" + matakuliahId,
+            type: 'PUT',
+            contentType: "application/json",
+            data: JSON.stringify(updateData),
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            success: function(response) {
+                console.log("Response API:", response);
+                alert("Data matakuliah berhasil diperbarui!");
+                $('#modal-edit').modal('hide');
+                location.reload();
+            },
+            error: function(xhr) {
+                console.error("Terjadi kesalahan:", xhr.responseText);
+                alert("Terjadi kesalahan: " + (xhr.responseJSON ? xhr.responseJSON.message : "Gagal memperbarui matakuliah."));
+            }
+        });
+    });
+
+
 </script>

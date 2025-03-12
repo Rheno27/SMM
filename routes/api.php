@@ -12,7 +12,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanc
 
 //routes with middleware for authentication
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::apiResource('mahasiswa', MahasiswaController::class)->except(['store', 'edit']);
+    Route::apiResource('mahasiswa', MahasiswaController::class)->except(['create', 'edit']);
     Route::apiResource('matakuliah', MatakuliahController::class)->except(['create', 'edit']);
     Route::apiResource('tugas', TugasController::class)->except(['create', 'edit']);
     Route::post('/mahasiswa/{id}/matakuliah', [MahasiswaController::class, 'tambahMatakuliah']);

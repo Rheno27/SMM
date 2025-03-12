@@ -8,7 +8,11 @@ use Illuminate\Support\Facades\Auth;
 use App\Helpers\ResponseHelper;
 
 class MatakuliahController extends Controller
-{
+{   
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum')->except(['index', 'show']);
+    }
     public function index()
     {
         $matakuliah = Matakuliah::all();

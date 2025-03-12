@@ -77,6 +77,7 @@
                 status: $('#status').val(),
                 mahasiswa_id: user.id // Ambil mahasiswa_id dari user yang login
             };
+            console.log("Data yang akan dikirim ke API (POST):", formData);
 
             $.ajax({
                 url: "{{ url('api/tugas') }}", // Sesuaikan dengan API endpoint
@@ -95,7 +96,7 @@
                 },
                 error: function(xhr, status, error) {
                     alert(xhr.responseText, );
-                    console.log(xhr.responseText);
+                    console.log("Error tambah tugas: ", xhr.responseText);
                 }
             });
         });
@@ -133,48 +134,49 @@
     });
 
     // Edit Data Tugas
-    $(document).ready(function () {
+    $(document).ready(function() {
         let token = localStorage.getItem('token');
-
+        let user = JSON.parse(localStorage.getItem('user'));
         if (!token) {
-            alert("User tidak ditemukan atau belum login.");
+            alert("User tidak ditemukan atau belum login.");    
             return;
         }
-
-        // Event ketika tombol edit ditekan
-        $('body').on('click', '#btn-edit', function (e) {
+        $('body').on('click', '#btn-edit', function(e) {
             e.preventDefault();
-
-            let tugasId = $(this).data('id'); // Ambil ID tugas dari tombol edit
+            let tugasId = $(this).data('id');
             console.log("ID Tugas: ", tugasId);
-            $('#modal-edit').modal('show'); // Tampilkan modal
+            $('#modal-edit').modal('show');
 
-            // Ambil data tugas berdasarkan ID
             $.ajax({
-                url: "/api/tugas/" + tugasId,
+                url: "{{ url('api/tugas') }}/" + tugasId,
                 type: 'GET',
                 headers: {
                     'Authorization': 'Bearer ' + token,
                 },
-                success: function (response) {
+                success: function(response) {
+
                     console.log("Response API: ", response);
 
                     let tugas = response.data;
+                    if(user.id !== tugas.mahasiswa_id) {
+                        $('#modal-edit').modal('hide');
+                        alert("Anda tidak diperbolehkan mengedit tugas ini.");
+
+                        return;
+                    }
                     if (tugas) {
-                        // Isi form dengan data lama
                         $('#edit_nama_tugas').val(tugas.nama_tugas || '');
                         $('#edit_deskripsi').val(tugas.deskripsi || '');
                         $('#edit_tanggal_pemberian_tugas').val(tugas.tanggal_pemberian_tugas || '');
                         $('#edit_tanggal_pengumpulan').val(tugas.tanggal_pengumpulan || '');
                         $('#edit_status').val(tugas.status || '');
-
-                        // Simpan ID tugas di atribut data-id form
+                        
                         $('#form-edit').attr('data-id', tugasId);
                     } else {
                         alert("Data tugas tidak ditemukan!");
                     }
                 },
-                error: function (xhr) {
+                error: function(xhr) {
                     alert("Gagal mengambil data tugas.");
                     console.log("Error: ", xhr.responseText);
                 }
@@ -182,5 +184,48 @@
         });
     });
 
+    $(document).on('submit', '#form-edit', function(e) {
+        e.preventDefault();
+
+        let token = localStorage.getItem('token');
+        if (!token) {
+            alert("User tidak ditemukan atau belum login.");
+            return;
+        }
+
+        let tugasId = $(this).attr('data-id');
+        console.log("ID Tugas yang akan diubah: ", tugasId);
+
+        let updateData = {
+            nama_tugas: $('#edit_nama_tugas').val().trim(),
+            deskripsi: $('#edit_deskripsi').val().trim(),
+            tanggal_pemberian_tugas: $('#edit_tanggal_pemberian_tugas').val().trim(),
+            tanggal_pengumpulan: $('#edit_tanggal_pengumpulan').val().trim(),
+            status: $('#edit_status').val().trim()
+        };
+
+        console.log("Data yang akan dikirim ke API (PUT):", updateData);
+
+        $.ajax({
+            url: "{{ url('api/tugas') }}/" + tugasId,
+            type: 'PUT',
+            contentType: "application/json",
+            data: JSON.stringify(updateData),
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            success: function(response) {
+                console.log("Response API: ", response);
+                alert("Tugas berhasil diperbarui!");
+                $('#modal-edit').modal('hide');
+                $('#tugas-table').DataTable().ajax.reload();
+            },
+            error: function(xhr) {
+                alert("Gagal memperbarui tugas.");
+                console.log("Error memperbarui tugas: ", xhr.responseText);
+            }
+        });
+    });
 </script>
 

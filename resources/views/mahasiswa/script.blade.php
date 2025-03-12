@@ -1,6 +1,14 @@
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 <script src="//cdn.datatables.net/2.2.2/js/dataTables.min.js"></script>
 <script>
+    function formatDate(dateString) {
+        let date = new Date(dateString);
+        let yyyy = date.getFullYear();
+        let mm = String(date.getMonth() + 1).padStart(2, '0'); // Bulan mulai dari 0
+        let dd = String(date.getDate()).padStart(2, '0');
+        return `${yyyy}-${mm}-${dd}`; // Format sesuai input date
+    }
+
     $(document).ready(function() {
         $('#mahasiswa-table').DataTable({
             processing: true,
@@ -36,8 +44,8 @@
                     data: 'id',
                     render: function(data) {
                         return `
-                            <button id="btn-edit" class="btn btn-warning btn-sm" >Edit</button>
-                            <button id="btn-hapus" class="btn btn-danger btn-sm" >Hapus</button>
+                            <button id="btn-edit" class="btn btn-warning btn-sm" data-id="${data}">Edit</button>
+                            <button id="btn-hapus" class="btn btn-danger btn-sm" data-id="${data}">Hapus</button>
                         `;
                     }
                 }
@@ -118,15 +126,14 @@
         });
     });
 
+    // Edit Data Mahasiswa
     $(document).ready(function() {
-        let user = JSON.parse(localStorage.getItem('user'));
         let token = localStorage.getItem('token');
-
-        if (!user || !user.id || !token) {
+        let user = JSON.parse(localStorage.getItem('user'));
+        if (!token) {
             alert("User tidak ditemukan atau belum login.");
             return;
         }
-
         $('body').on('click', '#btn-edit', function(e) {
             e.preventDefault();
             let mahasiswaId = $(this).data('id');
@@ -134,77 +141,92 @@
             $('#modal-edit').modal('show');
 
             $.ajax({
-                url: "/api/mahasiswa/" + mahasiswaId,
+                url: "{{ url('api/mahasiswa') }}/" + mahasiswaId,
                 type: 'GET',
                 headers: {
                     'Authorization': 'Bearer ' + token,
                 },
                 success: function(response) {
-                    $('#edit_nama').val(response.nama);
-                    $('#edit_nim').val(response.nim);
-                    $('#edit_email').val(response.email);
-                    $('#edit_prodi').val(response.prodi);
-                    $('#edit_alamat').val(response.alamat);
-                    $('#edit_no_hp').val(response.no_hp);
-                    $('#edit_tanggal_lahir').val(response.tanggal_lahir);
-                    $('#edit_jenis_kelamin').val(response.jenis_kelamin);
-                    $('#modal-edit').modal('show');
-                },
-                error: function() {
-                    alert("Gagal mengambil data mahasiswa.");
-                }
-            });
-        });
+                    console.log("Response API: ", response);
 
-        // Simpan perubahan data mahasiswa
-        $('#btn-simpan').on('click', function(e) {
-            e.preventDefault();
+                    let mahasiswa = response.data;
+                    if (user.id !== mahasiswa.id) {
+                        $('#modal-edit').modal('hide');
+                        alert("Anda tidak diperbolehkan mengedit data ini.");
 
-            let formData = new FormData();
-            formData.append("nama", $('#edit_nama').val());
-            formData.append("nim", $('#edit_nim').val());
-            formData.append("email", $('#edit_email').val());
-            formData.append("prodi", $('#edit_prodi').val());
-            formData.append("alamat", $('#edit_alamat').val());
-            formData.append("no_hp", $('#edit_no_hp').val());
-            formData.append("tanggal_lahir", $('#edit_tanggal_lahir').val());
-            formData.append("jenis_kelamin", $('#edit_jenis_kelamin').val());
+                        return;
+                    }
+                    if (mahasiswa) {
+                        $('#edit_nama').val(mahasiswa.nama || '');  
+                        $('#edit_nim').val(mahasiswa.nim || '');    
+                        $('#edit_email').val(mahasiswa.email || '');
+                        $('#edit_prodi').val(mahasiswa.prodi || '');
+                        $('#edit_alamat').val(mahasiswa.alamat || '');
+                        $('#edit_no_hp').val(mahasiswa.no_hp || '');
+                        $('#edit_tanggal_lahir').val(formatDate(mahasiswa.tanggal_lahir));
+                        $('#edit_jenis_kelamin').val(mahasiswa.jenis_kelamin || '');
 
-            // Cek apakah user ingin mengganti password
-            let password = $('#edit_password').val();
-            let password_confirmation = $('#edit_password_confirmation').val();
-            if (password) {
-                formData.append("password", password);
-                formData.append("password_confirmation", password_confirmation);
-            }
+                        let fullFotoUrl = mahasiswa.foto ? `{{url('storage')}}/${mahasiswa.foto}` : "default-avatar.png";
+                        $('#edit_foto_preview').attr('src', fullFotoUrl);
 
-            // Cek apakah ada file foto yang dipilih
-            let foto = $('#edit_foto')[0].files[0];
-            if (foto) {
-                formData.append("foto", foto);
-            }
-
-            $.ajax({
-                url: "/api/mahasiswa/" + mahasiswaId,
-                type: 'POST',
-                data: formData,
-                contentType: false,
-                processData: false,
-                headers: {
-                    'Authorization': 'Bearer ' + token,
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'X-HTTP-Method-Override': 'PUT'
-                },
-                success: function(response) {
-                    alert("Data berhasil diubah!");
-                    $('#modal-edit').modal('hide');
-                    location.reload();
+                        $('#form-edit').attr('data-id', mahasiswaId);
+                    } else {
+                        alert("Data mahasiswa tidak ditemukan!");
+                    }
                 },
                 error: function(xhr) {
-                    alert("Terjadi kesalahan: " + xhr.responseJSON.message);
+                    alert("Gagal mengambil data mahasiswa.");
+                    console.log("Error: ", xhr.responseText);
                 }
-            });
+            })
         });
     });
+    
+    $(document).on('submit', '#form-edit', function(e) {
+        e.preventDefault();
 
+        let token = localStorage.getItem('token');
+        if (!token) {
+            alert("User tidak ditemukan atau belum login.");
+            return;
+        }
+
+        let mahasiswaId = $(this).attr('data-id');
+        console.log("ID Mahasiswa yang akan diubah: ", mahasiswaId);
+        
+        let updateData = {
+            nama: $('#edit_nama').val().trim(),
+            nim: $('#edit_nim').val().trim(),
+            email: $('#edit_email').val().trim(),
+            prodi: $('#edit_prodi').val().trim(),
+            foto: $('#edit_foto').val().trim(),
+            alamat: $('#edit_alamat').val().trim(),
+            no_hp: $('#edit_no_hp').val().trim(),
+            tanggal_lahir: $('#edit_tanggal_lahir').val().trim(),
+            jenis_kelamin: $('#edit_jenis_kelamin').val().trim()
+        };
+
+        console.log("Data yang akan dikirim ke API (PUT):", updateData);
+
+        $.ajax({
+            url: "{{ url('api/mahasiswa') }}/" + mahasiswaId,
+            type: 'PUT',
+            contentType: "application/json",
+            data: JSON.stringify(updateData),
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            success: function(response) {
+                console.log("Response API: ", response);
+                alert("Data mahasiswa berhasil diperbarui!");
+                $('#modal-edit').modal('hide');
+                $('#mahasiswa-table').DataTable().ajax.reload();
+            },
+            error: function(xhr) {
+                alert("Gagal memperbarui data mahasiswa.");
+                console.log("Error memperbarui data mahasiswa: ", xhr.responseText);
+            }
+        });
+    });
 </script>

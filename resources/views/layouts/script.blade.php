@@ -34,4 +34,14 @@
             }
         });
     }); 
+
+    $(document).ready(function() {
+        $('#logout').click(function() {
+            localStorage.removeItem('user');
+            localStorage.removeItem('token');
+            window.location.href = "/login";
+        });
+    });
+
+</script>
 </script>

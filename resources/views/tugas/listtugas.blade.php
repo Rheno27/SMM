@@ -25,7 +25,7 @@
                 
             </div>
             <!-- AKHIR DATA -->
-        <!-- START MODAL -->
+        <!-- START MODAL TAMBAH -->
         <div class="modal" tabindex="-1" id="modal-tambah">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -69,70 +69,73 @@
                                     </select>
                                 </div>
                             </div>
+                        </form>
                     <!-- AKHIR FORM -->
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button  type="submit" class="btn btn-primary tombol-simpan">Simpan</button>
+                    <button type="button" class="btn btn-secondary tombol-batal">Batal</button>
+                    <button type="submit" class="btn btn-primary tombol-simpan">Simpan</button>
                 </div>
                 </div>
             </div>
         </div>
         <!-- AKHIR MODAL TAMBAH -->
         <!-- START MODAL EDIT -->
-        <div class="modal" tabindex="-1" id="modal-edit">
-            <div class="modal-dialog">
-                <div class="modal-content">
+    <div class="modal" tabindex="-1" id="modal-edit">
+        <div class="modal-dialog">
+            <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Modal title</h5>
+                    <h5 class="modal-title">Edit Tugas</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <!-- START FORM -->
-                        <form id='form-edit'>
-                            <div class="mb-3 row">
-                                <label for="edit_nama_tugas" class="col-sm-2 col-form-label">Nama Tugas</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" name='edit_nama_tugas' id="edit_nama_tugas">
-                                </div>
+                    <form id="form-edit">                        
+                        <div class="mb-3 row">
+                            <label for="edit_nama_tugas" class="col-sm-4 col-form-label">Nama Tugas</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" name="edit_nama_tugas" id="edit_nama_tugas">
                             </div>
-                            <div class="mb-3 row">
-                                <label for="edit_deskripsi" class="col-sm-2 col-form-label">Deskripsi</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" name='edit_deskripsi' id="edit_deskripsi">
-                                </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="edit_deskripsi" class="col-sm-4 col-form-label">Deskripsi</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" name="edit_deskripsi" id="edit_deskripsi">
                             </div>
-                            <div class="mb-3 row">
-                                <label for="edit_tanggal_pemberian_tugas" class="col-sm-2 col-form-label">Tanggal Pemberian Tugas</label>
-                                <div class="col-sm-10">
-                                    <input type="date" class="form-control" name='edit_tanggal_pemberian_tugas' id="edit_tanggal_pemberian_tugas">
-                                </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="edit_tanggal_pemberian_tugas" class="col-sm-4 col-form-label">Tanggal Pemberian Tugas</label>
+                            <div class="col-sm-8">
+                                <input type="date" class="form-control" name="edit_tanggal_pemberian_tugas" id="edit_tanggal_pemberian_tugas">
                             </div>
-                            <div class="mb-3 row">
-                                <label for="edit_tanggal_pengumpulan" class="col-sm-2 col-form-label">Tanggal Pengumpulan</label>
-                                <div class="col-sm-10">
-                                    <input type="date" class="form-control" name='edit_tanggal_pengumpulan' id="edit_tanggal_pengumpulan">
-                                </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="edit_tanggal_pengumpulan" class="col-sm-4 col-form-label">Tanggal Pengumpulan</label>
+                            <div class="col-sm-8">
+                                <input type="date" class="form-control" name="edit_tanggal_pengumpulan" id="edit_tanggal_pengumpulan">
                             </div>
-                            <div class="mb-3 row">
-                                <label for="edit_status" class="col-sm-2 col-form-label">Status</label>
-                                <div class="col-sm-10">
-                                    <select class="form-control" name='edit_status' id="edit_status">
-                                        <option value="Belum Selesai">Belum Selesai</option>
-                                        <option value="Selesai">Selesai</option>
-                                    </select>
-                                </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="edit_status" class="col-sm-4 col-form-label">Status</label>
+                            <div class="col-sm-8">
+                                <select class="form-control" name="edit_status" id="edit_status">
+                                    <option value="Belum Selesai">Belum Selesai</option>
+                                    <option value="Selesai">Selesai</option>
+                                </select>
                             </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary tombol-batal">Batal</button>
+                            <button type="submit" class="btn btn-primary tombol-update">Update</button>
+                        </div>
+                    </form>
                     <!-- AKHIR FORM -->
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button  type="submit" class="btn btn-primary tombol-simpan">Simpan Perubahan</button>
-                </div>
                 </div>
             </div>
         </div>
-        <!-- AKHIR MODAL EDIT -->
+    </div>
+    <!-- AKHIR MODAL EDIT -->
+
         <!--DELETE TUGAS MODAL -->
         <div class="modal" tabindex="-1" id="modal-delete">
             <div class="modal-dialog">

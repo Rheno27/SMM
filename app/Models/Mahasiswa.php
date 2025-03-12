@@ -35,6 +35,8 @@ class Mahasiswa extends Authenticatable
         'tanggal_lahir' => 'date',
         'password' => 'hashed',
     ];
+    
+    
 
     public function matakuliah()
     {

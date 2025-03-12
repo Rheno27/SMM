@@ -9,6 +9,10 @@ use App\Helpers\ResponseHelper;
 
 class TugasController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum')->except(['index', 'show']);
+    }
     public function index()
     {
         $tugas = Tugas::all();

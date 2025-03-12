@@ -88,12 +88,95 @@
                             <!-- AKHIR FORM -->
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button id="btn-simpan" type="submit" class="btn btn-primary">Simpan</button>
+                            <button type="button" class="btn btn-secondary tombol-batal">Close</button>
+                            <button type="submit" class="btn btn-primary tombol-simpan">Simpan</button>
                         </div>
                     </div>
                 </div>
             </div>
+            <!-- AKHIR MODAL -->
+            <!-- START MODAL EDIT -->
+            <div class="modal" tabindex="-1" id="modal-edit">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Edit Mahasiswa</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- START FORM -->
+                            <form id="form-edit">                        
+                                <div class="mb-3 row">
+                                    <label for="edit_nama" class="col-sm-4 col-form-label">Nama</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" name="edit_nama" id="edit_nama">
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label for="edit_nim" class="col-sm-4 col-form-label">NIM</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" name="edit_nim" id="edit_nim">
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label for="edit_email" class="col-sm-4 col-form-label">Email</label>
+                                    <div class="col-sm-8">
+                                        <input type="email" class="form-control" name="edit_email" id="edit_email">
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label for="edit_prodi" class="col-sm-4 col-form-label">Prodi</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" name="edit_prodi" id="edit_prodi">
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label for="edit_alamat" class="col-sm-4 col-form-label">Alamat</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" name="edit_alamat" id="edit_alamat">
+                                    </div>
+                                </div>
+
+                                <div class="mb-3 row">
+                                    <img id="edit_foto_preview" src="" alt="Foto Mahasiswa" style="max-width: 100px;">
+                                    <label for="edit_foto" class="col-sm-4 col-form-label">Foto</label>
+                                    <div class="col-sm-8">
+                                        <input type="file" class="form-control" name="edit_foto" id="edit_foto">
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label for="edit_no_hp" class="col-sm-4 col-form-label">No HP</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" name="edit_no_hp" id="edit_no_hp">
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label for="edit_tanggal_lahir" class="col-sm-4 col-form-label">Tanggal Lahir</label>
+                                    <div class="col-sm-8">
+                                        <input type="date" class="form-control" name="edit_tanggal_lahir" id="edit_tanggal_lahir">
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label for="edit_jenis_kelamin" class="col-sm-4 col-form-label">Jenis Kelamin</label>
+                                    <div class="col-sm-8">
+                                        <select class="form-select" name="edit_jenis_kelamin" id="edit_jenis_kelamin">
+                                            <option value="Laki-laki">Laki-laki</option>
+                                            <option value="Perempuan">Perempuan</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary tombol-batal">Batal</button>
+                                    <button type="submit" class="btn btn-primary tombol-update">Update</button>
+                                </div>
+                            </form>
+                            <!-- AKHIR FORM -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- AKHIR MODAL EDIT -->
+
             <!-- AKHIR MODAL -->
 
         <!--DELETE MAHASISWA MODAL -->

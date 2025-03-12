@@ -12,6 +12,10 @@ use Illuminate\Support\Facades\Storage;
 
 class MahasiswaController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum')->except(['index', 'show']);
+    }
     /**
      * Menampilkan daftar mahasiswa
      */
@@ -86,7 +90,6 @@ class MahasiswaController extends Controller
         $request->validate([
             'nama' => 'sometimes|string|max:100',
             'nim' => 'sometimes|string|max:10|unique:mahasiswa,nim,' ,
-            'email' => 'sometimes|email|max:100|unique:mahasiswa,email,',
             'prodi' => 'sometimes|string|max:100',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'alamat' => 'sometimes|string|max:255',

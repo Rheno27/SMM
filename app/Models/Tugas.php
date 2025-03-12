@@ -15,4 +15,9 @@ class Tugas extends Model
         'mahasiswa_id'
     ];
 
+    public function mahasiswa()
+    {
+        return $this->belongsTo(Mahasiswa::class, 'mahasiswa_id')
+                    ->withTimestamps();
+    }
 }
