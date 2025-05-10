@@ -9,10 +9,12 @@ use App\Http\Controllers\AuthController;
 // Auth routes
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+Route::post('/mahasiswa', [MahasiswaController::class, 'store']);
+
 
 //routes with middleware for authentication
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::apiResource('mahasiswa', MahasiswaController::class)->except(['create', 'edit']);
+    Route::apiResource('mahasiswa', MahasiswaController::class)->except(['create', 'edit', 'store']);
     Route::apiResource('matakuliah', MatakuliahController::class)->except(['create', 'edit']);
     Route::apiResource('tugas', TugasController::class)->except(['create', 'edit']);
     Route::post('/mahasiswa/{id}/matakuliah', [MahasiswaController::class, 'tambahMatakuliah']);
